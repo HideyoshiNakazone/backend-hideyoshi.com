@@ -34,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        log.info("Password encoded {}", passwordEncoder.encode("test"));
 
         ClientDTO client = this.clientService.save(
                 new ClientDTO(
@@ -45,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "ADMIN$USER"
                 )
         );
+
+        log.info(passwordEncoder.encode("passwd"));
+        log.info(client.getPassword());
 
         auth.inMemoryAuthentication()
                 .withUser(client.getUsername())

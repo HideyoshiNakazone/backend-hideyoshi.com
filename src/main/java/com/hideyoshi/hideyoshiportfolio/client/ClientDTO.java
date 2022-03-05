@@ -1,6 +1,8 @@
 package com.hideyoshi.hideyoshiportfolio.client;
 
 import antlr.StringUtils;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -34,7 +36,7 @@ public class ClientDTO {
         this.setFullName(client.getFullName());
         this.setEmail(client.getEmail());
         this.setUsername(client.getUsername());
-        this.setPassword(client.getPassword());
+        this.password = client.getPassword();
         this.setRoles(client.getRoles());
     }
 
