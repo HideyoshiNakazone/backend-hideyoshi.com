@@ -59,7 +59,14 @@ public class ClientRepository {
     public ClientDTO save(final @Valid Client client) {
         this.entityManager.persist(client);
         this.entityManager.flush();
-        return new ClientDTO(client);
+
+        ClientDTO clientSaved = new ClientDTO(client);
+
+        clientSaved.setId(null);
+        clientSaved.setPasswordRaw(null);
+        clientSaved.setRoles(null);
+        
+        return clientSaved;
     }
 
     @Transactional

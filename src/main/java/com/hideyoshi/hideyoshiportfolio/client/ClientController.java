@@ -24,9 +24,9 @@ public class ClientController {
         return ResponseEntity.ok(this.clientService.findAll());
     }
 
-    @GetMapping(path = "/{username}")
-    public ResponseEntity<ClientDTO> findByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(this.clientService.findByUsername(username));
+    @GetMapping(path = "/validation")
+    public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(this.clientService.findByUsernameForValidation(userDetails.getUsername()));
     }
 
     @PostMapping("/admin")

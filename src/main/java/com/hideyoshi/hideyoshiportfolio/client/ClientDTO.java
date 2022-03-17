@@ -1,19 +1,17 @@
 package com.hideyoshi.hideyoshiportfolio.client;
 
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDTO {
 
     private Long id;
@@ -34,7 +32,7 @@ public class ClientDTO {
         this.setFullName(client.getFullName());
         this.setEmail(client.getEmail());
         this.setUsername(client.getUsername());
-        this.setPasswordHashed(client.getPassword());
+        this.setPasswordRaw(client.getPassword());
         this.setRoles(client.getRoles());
     }
 
@@ -61,14 +59,16 @@ public class ClientDTO {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void setPasswordHashed(String password) {
-        if (password.contains("{bcrypt}")) {
-            this.password = password;
-        }
+    public void setPasswordRaw(String password) {
+        this.password = password;
     }
 
     public void setRoles(String roles) {
-        this.roles = new ArrayList<>(Arrays.asList(roles.split("\\$")));
+        if (Objects.nonNull(roles)) {
+            this.roles = new ArrayList<>(Arrays.asList(roles.split("\\$")));
+        } else {
+            this.roles = null;
+        }
     }
 
     public Client toEntity() {

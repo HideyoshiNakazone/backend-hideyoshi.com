@@ -4,9 +4,9 @@ server:
   port: 8070
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-34-230-110-100.compute-1.amazonaws.com/depkfau8q9872n
-    username: viceznuhnvwyts
-    password: f33548ae7ae2a314d4b52d0219b8d66666ad44b0c8c3e761a34bb92c0369bbbe
+    url: jdbc:postgresql://ec2-34-224-226-38.compute-1.amazonaws.com/dfo2dcb89llp0v
+    username: rwpjcgoinhtvoz
+    password: fc374271bf94a8cfed2a92b4a9993a70a1183aca57291795236c0f85545c21fb
   jpa:
     hibernate:
       ddl-auto: create

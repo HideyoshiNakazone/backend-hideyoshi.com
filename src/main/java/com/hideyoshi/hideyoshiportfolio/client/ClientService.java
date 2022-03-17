@@ -28,6 +28,15 @@ public class ClientService implements UserDetailsService {
                 .orElseThrow(() -> new BadRequestException("User not Found"));
     }
 
+    public ClientDTO findByUsernameForValidation(String username) {
+        ClientDTO clientSaved = clientRepository.findByUsername(username);
+        clientSaved.setId(null);
+        clientSaved.setPasswordRaw(null);
+        clientSaved.setRoles(null);
+        return Optional.of(clientSaved)
+                .orElseThrow(() -> new BadRequestException("User not Found"));
+    }
+
     public ClientDTO findByEmail(String email) {
         return Optional.of(this.clientRepository.findByEmail(email))
                 .orElseThrow(() -> new BadRequestException("User not Found"));
@@ -54,7 +63,7 @@ public class ClientService implements UserDetailsService {
             clientPut.setUsername(clientSavedOnDB.getUsername());
         }
         if (!Objects.nonNull(clientPut.getPassword())) {
-            clientPut.setPasswordHashed(clientSavedOnDB.getPassword());
+            clientPut.setPasswordRaw(clientSavedOnDB.getPassword());
         }
         if (!Objects.nonNull(clientPut.getRoles())) {
             clientPut.setRoles(String.join("$",clientSavedOnDB.getRoles()));
