@@ -23,4 +23,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
+      env:
+        DATABASE_URL_PSQL: postgresql://ec2-34-224-226-38.compute-1.amazonaws.com/dfo2dcb89llp0v
+        DATABASE_USER: rwpjcgoinhtvoz
+        DATABASE_PASSWORD: fc374271bf94a8cfed2a92b4a9993a70a1183aca57291795236c0f85545c21fb
+        FRONT_END_PATH: https://com-hideyoshi.herokuapp.com
       run: mvn -B package --file pom.xml
