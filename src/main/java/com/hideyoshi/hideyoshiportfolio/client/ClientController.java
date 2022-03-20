@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,17 +25,21 @@ public class ClientController {
         return ResponseEntity.ok(this.clientService.findAll());
     }
 
-    @GetMapping(path = "/validation")
-    public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(this.clientService.findByUsernameForValidation(userDetails.getUsername()));
+    @GetMapping(path = "/validate")
+    public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
+        ClientDTO client = this.clientService.findByUsernameForValidation(userDetails.getUsername());
+        if (Objects.nonNull(client)) {
+            request.getSession().setAttribute("client",client);
+        }
+        return ResponseEntity.ok(client);
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/admin/create")
     public ResponseEntity<ClientDTO> save(@RequestBody ClientDTO client) {
         return new ResponseEntity<>(this.clientService.save(client), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/alter")
     public ResponseEntity<Void> alter(@RequestBody ClientDTO client,
                                       @AuthenticationPrincipal UserDetails userDetails) {
         if (this.clientService.findByUsername(userDetails.getUsername())
@@ -45,7 +50,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/admin/{email}")
+    @DeleteMapping("/admin/delete/{email}")
     public ResponseEntity<Void> delete(@PathVariable final String email) {
         this.clientService.delete(email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

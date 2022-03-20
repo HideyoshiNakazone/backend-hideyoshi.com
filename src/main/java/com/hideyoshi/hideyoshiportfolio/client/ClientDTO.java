@@ -7,12 +7,13 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ClientDTO {
+public class ClientDTO implements Serializable {
 
     private Long id;
 
@@ -79,7 +80,7 @@ public class ClientDTO {
         entity.setEmail(this.getEmail());
         entity.setUsername(this.getUsername());
         entity.setPassword(this.getPassword());
-        entity.setRoles(String.join("$",this.getRoles()));
+        entity.setRoles(String.join("$",Objects.nonNull(this.getRoles()) ? this.getRoles() : Arrays.asList("ROLE_USER")));
 
         return entity;
     }

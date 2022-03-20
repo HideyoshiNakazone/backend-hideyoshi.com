@@ -1,16 +1,23 @@
+com:
+  hideyoshi:
+    frontEndPath: ${FRONT_END_PATH}
+
 server:
   error:
     include-stacktrace: on_param
   port: 8070
 spring:
+  session:
+    store-type: JDBC
+    jdbc:
+      initialize-schema: always
   datasource:
-    url: jdbc:postgresql://ec2-34-224-226-38.compute-1.amazonaws.com/dfo2dcb89llp0v
-    username: rwpjcgoinhtvoz
-    password: fc374271bf94a8cfed2a92b4a9993a70a1183aca57291795236c0f85545c21fb
+    url: jdbc:${DATABASE_URL_PSQL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create
-
 logging:
   level:
     org:
