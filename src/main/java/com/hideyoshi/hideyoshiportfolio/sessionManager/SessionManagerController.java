@@ -20,7 +20,7 @@ public class SessionManagerController {
 
     private final ClientService clientService;
 
-    @GetMapping("validate")
+    @GetMapping("/validate")
     public ResponseEntity<ClientDTO> persistClientOnSession(HttpServletRequest request) {
 
         Object sessionObject = request.getSession(true).getAttribute("client");
