@@ -24,6 +24,7 @@ public class SessionManagerController {
     public ResponseEntity<ClientDTO> persistClientOnSession(HttpServletRequest request) {
 
         Object sessionObject = request.getSession(true).getAttribute("client");
+        log.info(sessionObject);
         if (Objects.nonNull(sessionObject)) {
             return ResponseEntity.ok((ClientDTO) sessionObject);
         } else {
