@@ -24,8 +24,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       env:
-        DATABASE_URL_PSQL: postgresql://ec2-34-224-226-38.compute-1.amazonaws.com/dfo2dcb89llp0v
-        DATABASE_USER: rwpjcgoinhtvoz
-        DATABASE_PASSWORD: fc374271bf94a8cfed2a92b4a9993a70a1183aca57291795236c0f85545c21fb
+        DATABASE_URL_PSQL: postgresql://ec2-44-195-191-252.compute-1.amazonaws.com/d10tor96c0dm9p
+        DATABASE_USER: rjjvaudyrywoui
+        DATABASE_PASSWORD: 0135756849d1ec60ff9b219f06cfbac1b9f7a69b0fb026e5dafc1855beab1711
         FRONT_END_PATH: https://com-hideyoshi.herokuapp.com
       run: mvn -B package --file pom.xml
