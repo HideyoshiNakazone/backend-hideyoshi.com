@@ -23,9 +23,17 @@ public class SessionManagerController {
     @GetMapping("/validate")
     public ResponseEntity<ClientDTO> persistClientOnSession(HttpServletRequest request) {
 
-        Object sessionObject = request.getSession(true).getAttribute("client");
+        ClientDTO sessionObject = (ClientDTO) request.getSession(true).getAttribute("client");
         if (Objects.nonNull(sessionObject)) {
-            return ResponseEntity.ok((ClientDTO) sessionObject);
+            ClientDTO client = clientService.findByUsername(sessionObject.getUsername());
+
+            client.setId(null);
+            client.setRoles(null);
+            client.setPasswordRaw(null);
+
+            log.info(client.toString());
+
+            return ResponseEntity.ok(client);
         } else {
             return null;
         }
