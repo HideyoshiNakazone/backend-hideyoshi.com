@@ -1,23 +1,36 @@
 com:
   hideyoshi:
     frontEndPath: ${FRONT_END_PATH}
-
+    testFrontEndPath: http://localhost:5000
 server:
   error:
     include-stacktrace: on_param
   port: 8070
+  servlet:
+    session:
+      secure: false
+      cookie:
+        http-only: false
 spring:
+  redis:
+    host: ${REDIS_PATH}
+    port: ${REDIS_PORT}
   session:
-    store-type: JDBC
-    jdbc:
-      initialize-schema: always
+    store-type: redis
+    persistent: true
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
   datasource:
-    url: jdbc:${DATABASE_URL_PSQL}
+    url: jdbc:${DATABASE_URL}
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      format_sql: true
+      ddl-auto: none
+    show-sql: true
 logging:
   level:
     org:

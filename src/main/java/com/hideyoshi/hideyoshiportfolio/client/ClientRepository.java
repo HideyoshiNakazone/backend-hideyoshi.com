@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class ClientRepository {

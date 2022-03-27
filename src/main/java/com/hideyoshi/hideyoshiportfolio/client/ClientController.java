@@ -9,12 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
+@Log4j2
+@CrossOrigin
 @RestController
 @RequestMapping("/client")
-@Log4j2
 @RequiredArgsConstructor
 public class ClientController {
 
@@ -26,12 +28,14 @@ public class ClientController {
     }
 
     @GetMapping(path = "/validate")
-    public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
+    public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         ClientDTO client = this.clientService.findByUsernameForValidation(userDetails.getUsername());
         if (Objects.nonNull(client)) {
-            request.getSession().setAttribute("client",client);
+            session.setAttribute("client", client);
+            return ResponseEntity.ok(client);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(client);
     }
 
     @PostMapping("/admin/create")
