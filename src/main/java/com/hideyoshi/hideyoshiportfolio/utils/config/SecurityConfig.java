@@ -32,9 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${com.hideyoshi.frontEndPath}")
     private String frontEndPath;
 
-    @Value("${com.hideyoshi.testFrontEndPath}")
-    private String testFrontEndPath;
-
     private final ClientService clientService;
 
     @Override
@@ -77,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(frontEndPath, testFrontEndPath)); // todo properties by environment
+        configuration.setAllowedOrigins(Arrays.asList(frontEndPath)); // todo properties by environment
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setAllowCredentials(true);

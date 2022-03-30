@@ -1,7 +1,6 @@
 com:
   hideyoshi:
     frontEndPath: ${FRONT_END_PATH}
-    testFrontEndPath: http://localhost:5000
 server:
   error:
     include-stacktrace: on_param
