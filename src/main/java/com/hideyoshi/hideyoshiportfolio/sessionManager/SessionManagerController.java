@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @Log4j2
-@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/session")
