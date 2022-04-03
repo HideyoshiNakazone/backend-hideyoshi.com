@@ -11,10 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @SpringBootApplication
 public class HideyoshiPortfolioApplication {
 
-	@Value("${com.hideyoshi.frontEndPath}")
-	private String frontEndPath;
-
 	public static void main(String[] args) {
 		SpringApplication.run(HideyoshiPortfolioApplication.class, args);
 	}
+
 }
