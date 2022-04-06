@@ -12,4 +12,5 @@ RUN mvn -Dmaven.test.skip -f /home/app/pom.xml clean package
 FROM openjdk:11-jdk
 
 COPY --from=build /home/app/target/*.jar app.jar
+COPY src/main/resources/* credentials/
 ENTRYPOINT ["java","-jar","/app.jar"]

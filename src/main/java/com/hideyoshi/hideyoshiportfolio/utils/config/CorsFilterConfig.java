@@ -17,12 +17,17 @@ public class CorsFilterConfig implements Filter {
     @Value("${com.hideyoshi.frontEndPath}")
     private String frontEndPath;
 
+    @Value("${com.hideyoshi.frontEndConnectionType}")
+    private String connectionType;
+
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
+        connectionType = (connectionType.equals("secure")) ? "https" : "http";
+
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        response.setHeader("Access-Control-Allow-Origin", "https://"+frontEndPath);
+        response.setHeader("Access-Control-Allow-Origin", connectionType+frontEndPath);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods",
                 "ACL, CANCELUPLOAD, CHECKIN, CHECKOUT, COPY, DELETE, GET, HEAD, LOCK, MKCALENDAR, MKCOL, MOVE, OPTIONS, POST, PROPFIND, PROPPATCH, PUT, REPORT, SEARCH, UNCHECKOUT, UNLOCK, UPDATE, VERSION-CONTROL");
