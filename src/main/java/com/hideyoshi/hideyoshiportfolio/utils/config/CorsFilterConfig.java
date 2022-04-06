@@ -23,11 +23,11 @@ public class CorsFilterConfig implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
-        connectionType = (connectionType.equals("secure")) ? "https" : "http";
+        String connectionProtocol = (connectionType.equals("secure")) ? "https://" : "http://";
 
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        response.setHeader("Access-Control-Allow-Origin", connectionType+frontEndPath);
+        response.setHeader("Access-Control-Allow-Origin", connectionProtocol+frontEndPath);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods",
                 "ACL, CANCELUPLOAD, CHECKIN, CHECKOUT, COPY, DELETE, GET, HEAD, LOCK, MKCALENDAR, MKCOL, MOVE, OPTIONS, POST, PROPFIND, PROPPATCH, PUT, REPORT, SEARCH, UNCHECKOUT, UNLOCK, UPDATE, VERSION-CONTROL");
