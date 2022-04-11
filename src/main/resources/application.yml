@@ -2,18 +2,10 @@ com:
   hideyoshi:
     frontEndPath: ${FRONT_END_PATH}
     frontEndConnectionType: ${FRONT_END_CONNECTION_TYPE}
-security:
-  require-ssl: true
 server:
   error:
     include-stacktrace: on_param
-  ssl:
-    key-store: ${SSL_KEY_PATH}
-    key-store-password: ${SSL_KEY_PASSWORD}
-    key-password: ${SSL_KEY_PASSWORD}
-    key-store-type: ${SSL_KEY_TYPE}
-    key-alias: ${SSL_KEY_ALIAS}
-  port: 443
+  port: ${PORT}
 spring:
   redis:
     host: ${REDIS_PATH}
