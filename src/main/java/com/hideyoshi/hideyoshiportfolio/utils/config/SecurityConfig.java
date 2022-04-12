@@ -47,19 +47,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-        try {
-            this.clientService.findByUsername("YoshiUnfriendly");
-        } catch (Exception e) {
-            this.clientService.save(
-                    new ClientDTO(
-                            "Vitor Hideyoshi",
-                            "vitor.h.n.batista@gmail.com",
-                            "YoshiUnfriendly",
-                            "passwd",
-                            "ROLE_ADMIN"
-                    )
-            );
-        }
+        this.clientService.save(
+                new ClientDTO(
+                        "Vitor Hideyoshi",
+                        "vitor.h.n.batista@gmail.com",
+                        "YoshiUnfriendly",
+                        "passwd",
+                        "ROLE_ADMIN"
+                )
+        );
 
         auth.userDetailsService(clientService)
                 .passwordEncoder(passwordEncoder);
