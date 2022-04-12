@@ -43,7 +43,11 @@ public class ClientService implements UserDetailsService {
     }
 
     public ClientDTO save(ClientDTO clientPost) {
-        return clientRepository.save(clientPost.toEntity());
+        if (Objects.nonNull(this.findByEmail(clientPost.getEmail()))) {
+            return clientRepository.save(clientPost.toEntity());
+        } else {
+            throw new BadRequestException("Client Account Already Exists");
+        }
     }
 
     public void alter(ClientDTO clientPut) {
