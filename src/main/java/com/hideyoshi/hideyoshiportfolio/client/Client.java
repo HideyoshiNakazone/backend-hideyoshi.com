@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,21 +22,16 @@ public class Client implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
     @Column(name = "full_name")
     private String fullName;
 
-    @NotEmpty
     private String email;
 
-    @NotEmpty
     private String username;
 
-    @NotEmpty
     @Column(name = "passwd")
     private String password;
 
-    @NotEmpty
     private String roles;
 
     @Override

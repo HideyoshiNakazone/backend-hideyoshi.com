@@ -7,8 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.net.SSLHostConfig;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -22,19 +20,13 @@ public class SessionManagerService implements TomcatConnectorCustomizer {
     private final ClientService clientService;
 
     public ClientDTO validateSession(HttpSession session) {
-
         ClientDTO sessionObject = (ClientDTO) session.getAttribute("client");
-        ClientDTO client = null;
-
         if (Objects.nonNull(sessionObject)) {
-            client = clientService.findByUsername(sessionObject.getUsername());
-
-            client.setId(null);
-            client.setRoles(null);
-            client.setPasswordRaw(null);
+            log.info(sessionObject.toString());
+            return clientService.findByUsername((sessionObject).getUsername());
+        } else {
+            return null;
         }
-
-        return client;
     }
 
     @Override

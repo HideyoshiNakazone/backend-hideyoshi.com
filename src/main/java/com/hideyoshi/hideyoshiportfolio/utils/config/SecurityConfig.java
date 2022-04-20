@@ -4,8 +4,6 @@ import com.hideyoshi.hideyoshiportfolio.client.ClientDTO;
 import com.hideyoshi.hideyoshiportfolio.client.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,11 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Log4j2
 @Configuration
@@ -47,15 +40,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-        this.clientService.save(
-                new ClientDTO(
-                        "Vitor Hideyoshi",
-                        "vitor.h.n.batista@gmail.com",
-                        "YoshiUnfriendly",
-                        "passwd",
-                        "ROLE_ADMIN"
-                )
+        ClientDTO adminAccount = new ClientDTO(
+                "Vitor Hideyoshi",
+                "vitor.h.n.batista@gmail.com",
+                "YoshiUnfriendly",
+                "passwd",
+                "ROLE_ADMIN"
         );
+
+        try{
+            this.clientService.findByUsername(adminAccount.getUsername());
+        } catch (Exception e) {
+            this.clientService.save(adminAccount);
+        }
 
         auth.userDetailsService(clientService)
                 .passwordEncoder(passwordEncoder);

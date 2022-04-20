@@ -9,13 +9,23 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
 public class ClientRepository {
     @PersistenceContext
     private EntityManager entityManager;
+
+    private List<Selection<?>> fieldsForQuery(Root<Client> from) {
+        return Arrays.asList(
+                from.get(Client_.fullName),
+                from.get(Client_.email),
+                from.get(Client_.username)
+        );
+    }
 
     public List<ClientDTO> listAll() {
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
@@ -31,6 +41,18 @@ public class ClientRepository {
     }
 
     public ClientDTO findByUsername(String username) {
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<ClientDTO> criteria = cb.createQuery(ClientDTO.class);
+        Root<Client> from = criteria.from(Client.class);
+
+        criteria.multiselect(fieldsForQuery(from)).where(cb.equal(from.get(Client_.username), username));
+
+        TypedQuery<ClientDTO> query = this.entityManager.createQuery(criteria);
+
+        return query.getSingleResult();
+    }
+
+    public ClientDTO findByUsernameValidation(String username) {
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<ClientDTO> criteria = cb.createQuery(ClientDTO.class);
         Root<Client> from = criteria.from(Client.class);
@@ -60,12 +82,8 @@ public class ClientRepository {
         this.entityManager.flush();
 
         ClientDTO clientSaved = new ClientDTO(client);
-
-        clientSaved.setId(null);
-        clientSaved.setPasswordRaw(null);
-        clientSaved.setRoles(null);
         
-        return clientSaved;
+        return findByUsername(clientSaved.getUsername());
     }
 
     @Transactional

@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public class ClientController {
 
     @GetMapping(path = "/validate")
     public ResponseEntity<ClientDTO> findByUsername(@AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
-        ClientDTO client = this.clientService.findByUsernameForValidation(userDetails.getUsername());
+        ClientDTO client = this.clientService.findByUsername(userDetails.getUsername());
         if (Objects.nonNull(client)) {
             session.setAttribute("client", client);
             return ResponseEntity.ok(client);

@@ -1,25 +1,32 @@
 package com.hideyoshi.hideyoshiportfolio.client;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ClientDTO implements Serializable {
+public class ClientDTO  implements Serializable {
+
+    private static final long serialVersionUID = -6547685895783886314L;
 
     private Long id;
 
     private String fullName;
 
-    @NotEmpty
     private String email;
 
     private String username;
@@ -38,21 +45,17 @@ public class ClientDTO implements Serializable {
     }
 
     public ClientDTO(String fullName, String email, String username, String password, String roles) {
-        if (Objects.nonNull(fullName)) {
-            this.setFullName(fullName);
-        }
-
+        this.setFullName(fullName);
         this.setEmail(email);
+        this.setUsername(username);
+        this.setPassword(password);
+        this.setRoles(roles);
+    }
 
-        if (Objects.nonNull(username)) {
-            this.setUsername(username);
-        }
-        if (Objects.nonNull(password)) {
-            this.setPassword(password);
-        }
-        if (Objects.nonNull(roles)) {
-            this.setRoles(roles);
-        }
+    public ClientDTO(String fullName, String email, String username) {
+        this.setFullName(fullName);
+        this.setEmail(email);
+        this.setUsername(username);
     }
 
     public void setPassword(String password) {

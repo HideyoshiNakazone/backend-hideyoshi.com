@@ -24,17 +24,8 @@ public class ClientService implements UserDetailsService {
     }
 
     public ClientDTO findByUsername(String username) {
-        return Optional.of(clientRepository.findByUsername(username))
-                .orElseThrow(() -> new BadRequestException("User not Found"));
-    }
-
-    public ClientDTO findByUsernameForValidation(String username) {
-        ClientDTO clientSaved = clientRepository.findByUsername(username);
-        clientSaved.setId(null);
-        clientSaved.setPasswordRaw(null);
-        clientSaved.setRoles(null);
-        return Optional.of(clientSaved)
-                .orElseThrow(() -> new BadRequestException("User not Found"));
+        return Optional.ofNullable(this.clientRepository.findByUsername(username))
+                .orElseThrow(() -> new BadRequestException("Client not found"));
     }
 
     public ClientDTO findByEmail(String email) {
@@ -54,26 +45,16 @@ public class ClientService implements UserDetailsService {
 
         ClientDTO clientSavedOnDB = this.findByEmail(clientPut.getEmail());
 
-        if(!Objects.nonNull(clientPut.getId())) {
-            clientPut.setId(clientSavedOnDB.getId());
+        if (Objects.nonNull(clientPut.getFullName())) {
+            clientSavedOnDB.setFullName(clientPut.getFullName());
         }
-        if (!Objects.nonNull(clientPut.getFullName())) {
-            clientPut.setFullName(clientSavedOnDB.getFullName());
+        if (Objects.nonNull(clientPut.getUsername())) {
+            clientSavedOnDB.setUsername(clientPut.getUsername());
         }
-        if (!Objects.nonNull(clientPut.getEmail())) {
-            clientPut.setEmail(clientSavedOnDB.getEmail());
-        }
-        if (!Objects.nonNull(clientPut.getUsername())) {
-            clientPut.setUsername(clientSavedOnDB.getUsername());
-        }
-        if (!Objects.nonNull(clientPut.getPassword())) {
-            clientPut.setPasswordRaw(clientSavedOnDB.getPassword());
-        }
-        if (!Objects.nonNull(clientPut.getRoles())) {
-            clientPut.setRoles(String.join("$",clientSavedOnDB.getRoles()));
-        }
-        log.info(clientPut.toString());
-        this.clientRepository.alter(clientPut.toEntity());
+
+        log.info(clientSavedOnDB.toString());
+
+        this.clientRepository.alter(clientSavedOnDB.toEntity());
 
     }
 
@@ -83,7 +64,7 @@ public class ClientService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return Optional.ofNullable(this.clientRepository.findByUsername(username).toEntity())
+        return Optional.ofNullable(this.clientRepository.findByUsernameValidation(username).toEntity())
                 .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
     }
 }
