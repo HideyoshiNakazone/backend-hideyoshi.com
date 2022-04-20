@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS client (
     full_name		VARCHAR(255)	        NOT NULL,
     email			VARCHAR(255)	        NOT NULL,
     username		VARCHAR(20) 	        NOT NULL,
-    passwd			VARCHAR(60)		        NOT NULL,
+    passwd			VARCHAR(120)		        NOT NULL,
     roles			VARCHAR(20)		        NOT NULL DEFAULT 'ROLE_USER',
 
     CONSTRAINT      client_primary_key      PRIMARY KEY (id),
