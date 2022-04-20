@@ -33,6 +33,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
+
       - name: Build with Maven
         env:
           FRONT_END_PATH: 'localhost:5000'
