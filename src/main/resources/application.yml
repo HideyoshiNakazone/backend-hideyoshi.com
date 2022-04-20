@@ -7,15 +7,11 @@ server:
     include-stacktrace: on_param
   port: ${PORT}
 spring:
-  redis:
-    host: ${REDIS_PATH}
-    port: ${REDIS_PORT}
   session:
-    store-type: redis
+    store-type: jdbc
     persistent: true
-    redis:
-      flush-mode: on_save
-      namespace: spring:session
+    jdbc:
+      initialize-schema: always
   datasource:
     url: jdbc:${DATABASE_URL}
     username: ${DATABASE_USER}
