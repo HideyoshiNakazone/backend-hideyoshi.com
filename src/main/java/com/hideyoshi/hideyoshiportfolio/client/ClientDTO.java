@@ -40,7 +40,7 @@ public class ClientDTO  implements Serializable {
         this.setFullName(client.getFullName());
         this.setEmail(client.getEmail());
         this.setUsername(client.getUsername());
-        this.setPasswordRaw(client.getPassword());
+        this.setPassword(client.getPassword());
         this.setRoles(client.getRoles());
     }
 
@@ -59,11 +59,6 @@ public class ClientDTO  implements Serializable {
     }
 
     public void setPassword(String password) {
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
-    }
-
-    public void setPasswordRaw(String password) {
         this.password = password;
     }
 

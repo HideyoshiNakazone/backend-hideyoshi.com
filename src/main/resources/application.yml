@@ -1,11 +1,12 @@
 com:
   hideyoshi:
-    frontEndPath: ${FRONT_END_PATH}
-    frontEndConnectionType: ${FRONT_END_CONNECTION_TYPE}
     adminFullname: ${ADMIN_FULLNAME}
     adminEmail: ${ADMIN_EMAIL}
     adminUsername: ${ADMIN_USERNAME}
     adminPassword: ${ADMIN_PASSWORD}
+    token:
+      duration: ${TOKEN_DURATION}
+      secret: ${random.uuid}
 server:
   error:
     include-stacktrace: on_param
@@ -28,4 +29,4 @@ logging:
   level:
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: off

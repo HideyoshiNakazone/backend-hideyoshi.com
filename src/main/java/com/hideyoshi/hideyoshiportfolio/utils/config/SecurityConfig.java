@@ -2,24 +2,26 @@ package com.hideyoshi.hideyoshiportfolio.utils.config;
 
 import com.hideyoshi.hideyoshiportfolio.client.ClientDTO;
 import com.hideyoshi.hideyoshiportfolio.client.ClientService;
-import lombok.RequiredArgsConstructor;
+import com.hideyoshi.hideyoshiportfolio.utils.token.TokenAuthenticatorFilter;
+import com.hideyoshi.hideyoshiportfolio.utils.token.TokenValidateFilter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Log4j2
-@Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${com.hideyoshi.adminFullname}")
@@ -34,16 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${com.hideyoshi.adminPassword}")
     private String adminPassword;
 
-    private final ClientService clientService;
+    @Autowired
+    private ClientService clientService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/client/admin/**").hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
+        http.csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .addFilter(new TokenAuthenticatorFilter(authenticationManager()))
+                .addFilter(new TokenValidateFilter(authenticationManager()));
 
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
@@ -62,13 +65,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         );
 
         try{
-            this.clientService.findByUsername(adminAccount.getUsername());
-        } catch (Exception e) {
             this.clientService.save(adminAccount);
+        } catch (Exception e) {
+            log.warn("Admin Client Account already exists. Continuing application boot.");
         }
 
         auth.userDetailsService(clientService)
                 .passwordEncoder(passwordEncoder);
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 
 }
