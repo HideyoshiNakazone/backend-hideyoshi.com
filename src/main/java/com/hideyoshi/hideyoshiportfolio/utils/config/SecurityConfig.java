@@ -4,6 +4,7 @@ import com.hideyoshi.hideyoshiportfolio.client.ClientDTO;
 import com.hideyoshi.hideyoshiportfolio.client.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,6 +21,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${com.hideyoshi.adminFullname}")
+    private String adminFullname;
+
+    @Value("${com.hideyoshi.adminEmail}")
+    private String adminEmail;
+
+    @Value("${com.hideyoshi.adminUsername}")
+    private String adminUsername;
+
+    @Value("${com.hideyoshi.adminPassword}")
+    private String adminPassword;
 
     private final ClientService clientService;
 
@@ -41,11 +54,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
         ClientDTO adminAccount = new ClientDTO(
-                "Vitor Hideyoshi",
-                "vitor.h.n.batista@gmail.com",
-                "YoshiUnfriendly",
-                "passwd",
-                "ROLE_ADMIN"
+                this.adminFullname,
+                this.adminEmail,
+                this.adminUsername,
+                this.adminPassword,
+                "ROLE_ADMIN$ROLE_USER"
         );
 
         try{
